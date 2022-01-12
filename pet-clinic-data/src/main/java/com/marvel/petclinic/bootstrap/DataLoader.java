@@ -1,11 +1,9 @@
 package com.marvel.petclinic.bootstrap;
 
-import com.marvel.petclinic.model.Owner;
-import com.marvel.petclinic.model.Pet;
-import com.marvel.petclinic.model.PetType;
-import com.marvel.petclinic.model.Vet;
+import com.marvel.petclinic.model.*;
 import com.marvel.petclinic.service.OwnerService;
 import com.marvel.petclinic.service.PetTypeService;
+import com.marvel.petclinic.service.SpecialityService;
 import com.marvel.petclinic.service.VetService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -17,16 +15,23 @@ public class DataLoader implements CommandLineRunner {
     private final OwnerService ownerService;
     private final VetService vetService;
     private final PetTypeService petTypeService;
+    private final SpecialityService specialityService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialityService specialityService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
+        this.specialityService = specialityService;
     }
 
 
     @Override
     public void run(String... args) throws Exception {
+        int count = petTypeService.findAll().size();
+        if (count == 0)loadData();
+    }
+
+    private void loadData() {
         // Adding some pets
         PetType dog = new PetType();
         dog.setName("Dog");
@@ -71,14 +76,24 @@ public class DataLoader implements CommandLineRunner {
 
         System.out.println("Loaded owners");
 
+        Speciality surgeon = new Speciality();
+        surgeon.setSpeciality("surgeon");
+        Speciality saveSurgery = specialityService.save(surgeon);
+
+        Speciality radioLogiest = new Speciality();
+        surgeon.setSpeciality("radioLogiest");
+        Speciality saveRadiology = specialityService.save(radioLogiest);
+
         Vet stephen = new Vet();
         stephen.setFirstName("Stephen");
         stephen.setLastName("Strange");
+        stephen.getSpecialities().add(saveRadiology);
         vetService.save(stephen);
 
         Vet thor = new Vet();
         thor.setFirstName("Thor");
         thor.setLastName("Odinson");
+        thor.getSpecialities().add(saveSurgery);
         vetService.save(thor);
 
         System.out.println("Loaded Vets");

@@ -1,13 +1,13 @@
 package com.marvel.petclinic.model;
 
 public class Speciality extends  BaseEntity {
-    private String description;
+    private String speciality;
 
-    public String getDescription() {
-        return description;
+    public String getSpeciality() {
+        return speciality;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSpeciality(String speciality) {
+        this.speciality = speciality;
     }
 }
