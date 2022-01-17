@@ -5,6 +5,7 @@ import com.marvel.petclinic.service.OwnerService;
 import com.marvel.petclinic.service.PetTypeService;
 import com.marvel.petclinic.service.SpecialityService;
 import com.marvel.petclinic.service.VetService;
+import com.marvel.petclinic.service.VisitService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +17,14 @@ public class DataLoader implements CommandLineRunner {
     private final VetService vetService;
     private final PetTypeService petTypeService;
     private final SpecialityService specialityService;
+    private final VisitService visitService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialityService specialityService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialityService specialityService, VisitService visitService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.specialityService = specialityService;
+        this.visitService = visitService;
     }
 
 
@@ -50,14 +53,18 @@ public class DataLoader implements CommandLineRunner {
         peter.setAddress("20 Ingram St. in Queens");
         peter.setTelephone("147536982");
 
-        Pet mani = new Pet();
-        mani.setName("Mani");
-        mani.setPetType(cat);
-        mani.setBirthDate(LocalDate.now());
-        mani.setOwner(peter);
-        peter.getPet().add(mani);
+        Pet snowbell = new Pet();
+        snowbell.setName("snowbell");
+        snowbell.setPetType(cat);
+        snowbell.setBirthDate(LocalDate.now());
+        snowbell.setOwner(peter);
+        peter.getPet().add(snowbell);
         ownerService.save(peter);
 
+        Visit snowbellVisit = new Visit();
+        snowbellVisit.setPet(snowbell);
+        snowbellVisit.setDate(LocalDate.now());
+        snowbellVisit.setDescription("Snezzy kitti");
 
         Owner stark = new Owner();
         stark.setFirstName("Tony");
